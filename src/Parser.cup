@@ -1,0 +1,106 @@
+package compiler;
+
+import java_cup.runtime.*;
+import java.util.*;
+import java.io.FileInputStream;
+import java.io.InputStream;
+   
+parser code {:
+    
+	public Node root = null;
+
+	public static parser getParser(String pPath) throws Exception {
+		InputStream is = null;
+		is = new FileInputStream(pPath);
+
+		return new parser(new Yylex(is));
+	}
+
+	public Node getTree() throws Exception {
+		if (root == null) {
+			this.parse();
+		}
+		return root;
+	}
+
+	public static void main(String args[]) throws Exception {
+		new parser(new Yylex(System.in)).parse();
+	}
+
+
+	
+	
+
+:};
+   
+
+
+terminal 		PROGRAM, BEGIN, END, WRITE, READ, IF, THEN, ELSE, ENDIF, WHILE, DO, ENDDO, VAR, INTEGER;           
+terminal 		MULT, PLUS, MINUS, DIV, SEMI, LEFT_P, RIGHT_P, EQ, GTR, LESS, LESS_EQ, GTR_EQ; 
+terminal 	    NOT_EQ, COLON, ASSIGNMENT, DOT;
+terminal 		UMINUS;  
+
+terminal String 	ID;
+terminal Integer	INT;
+
+   
+non terminal Node 		program;
+non terminal Node 		decl_list;
+non terminal Node		declaration;
+non terminal Node		block;
+non terminal Node		stat_seq;
+non terminal Node		statement;
+non terminal Node		expression;
+
+
+
+precedence right UMINUS;
+precedence left MULT, DIV;
+precedence left PLUS, MINUS;
+precedence left LESS, LESS_EQ, GTR, GTR_EQ; 
+precedence left EQ, NOT_EQ;
+
+start with program; 
+
+program 		::=	PROGRAM ID:id SEMI decl_list:dl block:b DOT			{: RESULT = new Program(id, dl, b); parser.root = RESULT;:}
+				;
+
+decl_list 		::= 	decl_list:dl declaration:d SEMI					{: RESULT = new DeclList(dl, d); 	:}
+				|	/* empty decl_list*/								{: RESULT = new DeclList();		:}		
+				;
+
+declaration 	::=	VAR ID:id COLON INTEGER								{: RESULT = new Declaration(id);	:}
+				;
+
+block			::=	BEGIN stat_seq:ss END								{: RESULT = new Block(ss);		:}
+				;
+
+stat_seq 		::=	stat_seq:ss statement:s	SEMI						{: RESULT = new StatSeq(ss, s);		:}
+				|	/* empty stat_seq */								{: RESULT = new StatSeq();		:}		
+				;			
+
+statement		::=	ID:id ASSIGNMENT expression:e						{: RESULT = new Assignment(id, e); 	:}
+				|	WRITE expression:e									{: RESULT = new Write(e);		:}
+				|	READ ID:id											{: RESULT = new Read(id);		:}
+				|	IF expression:e THEN stat_seq:ss1 ELSE stat_seq:ss2 ENDIF 	{: RESULT = new If(e, ss1, ss2); 	:}
+				|	WHILE expression:e DO stat_seq:ss ENDDO 			{: RESULT = new While(e, ss);		:}
+				;
+
+
+expression      ::= 	expression:e1 PLUS expression:e2         		{: RESULT = new Expression(e1, sym.PLUS, e2);	:}
+             	|	expression:e1 MINUS expression:e2					{: RESULT = new Expression(e1, sym.MINUS, e2);	:}
+             	|	expression:e1 MULT expression:e2					{: RESULT = new Expression(e1, sym.MULT, e2);	:}
+             	|	expression:e1 DIV expression:e2						{: RESULT = new Expression(e1, sym.DIV, e2);	:}
+             	|	expression:e1 LESS expression:e2					{: RESULT = new Expression(e1, sym.LESS, e2);	:}
+             	|	expression:e1 LESS_EQ expression:e2					{: RESULT = new Expression(e1, sym.LESS_EQ, e2);:}
+             	|	expression:e1 EQ expression:e2						{: RESULT = new Expression(e1, sym.EQ, e2);	:}
+             	|	expression:e1 NOT_EQ expression:e2					{: RESULT = new Expression(e1, sym.NOT_EQ, e2);	:}
+             	|	expression:e1 GTR expression:e2						{: RESULT = new Expression(e1, sym.GTR, e2);	:}
+             	|	expression:e1 GTR_EQ expression:e2					{: RESULT = new Expression(e1, sym.GTR_EQ, e2);	:}
+             	| 	MINUS expression:e 									{: RESULT = new Expression(sym.MINUS, e);      	:} %prec UMINUS		
+				| 	LEFT_P expression:e RIGHT_P	        				{: RESULT = e; 		          		:}
+     			|	INT:n												{: RESULT = new Expression(n); :}
+				|	ID:id												{: RESULT = new Expression(id); :}
+				;
+   
+
