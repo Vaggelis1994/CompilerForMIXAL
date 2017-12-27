@@ -1,0 +1,13 @@
+PROGRAM abs;
+	VAR number	:INTEGER;
+BEGIN
+	READ number;
+	WHILE (number != 0) DO 
+		IF (number < 0) THEN 
+			WRITE -number;
+		ELSE
+			WRITE number;
+		ENDIF;
+		READ number;		
+	ENDDO;
+END.

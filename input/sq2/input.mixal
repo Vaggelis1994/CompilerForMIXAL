@@ -1,0 +1,40 @@
+BUFI	EQU	1000
+BUFO	EQU	1500
+IO	EQU	19
+sqn	EQU	2000
+	ORIG	sqn
+	CON	0
+number	EQU	*-1
+	CON	0
+squared	EQU	*-1
+	IN	BUFI(IO)
+	JBUS	*(IO)
+	LDX	BUFI
+	NUM
+	STA	number
+	LDA	number
+	CMPA	V0
+	CON	0
+V0	EQU	*-1
+	JG	LOOP0
+	JLE	ENDLP0
+LOOP0	LDA	number
+	MUL	number
+	STA	squared
+	LDA	squared
+	CHAR
+	STX	BUFO
+	OUT	BUFO(IO)
+	JBUS	*(IO)
+	IN	BUFI(IO)
+	JBUS	*(IO)
+	LDX	BUFI
+	NUM
+	STA	number
+	LDA	number
+	CMPA	V1
+	CON	0
+V1	EQU	*-1
+	JG	LOOP0
+	JLE	ENDLP0
+ENDLP0	END	sqn

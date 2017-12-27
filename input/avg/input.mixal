@@ -1,0 +1,57 @@
+BUFI	EQU	1000
+BUFO	EQU	1500
+IO	EQU	19
+avg	EQU	2000
+	ORIG	avg
+	CON	0
+grade1	EQU	*-1
+	CON	0
+grade2	EQU	*-1
+	CON	0
+grade3	EQU	*-1
+	CON	0
+avg	EQU	*-1
+	IN	BUFI(IO)
+	JBUS	*(IO)
+	LDX	BUFI
+	NUM
+	STA	grade1
+	IN	BUFI(IO)
+	JBUS	*(IO)
+	LDX	BUFI
+	NUM
+	STA	grade2
+	IN	BUFI(IO)
+	JBUS	*(IO)
+	LDX	BUFI
+	NUM
+	STA	grade3
+	LDA	grade1
+	ADD	grade2
+	ADD	grade3
+	DIV	V0
+	CON	3
+V0	EQU	*-1
+	STA	avg
+	LDA	avg
+	CMPA	V1
+	CON	5
+V1	EQU	*-1
+	JGE	IF0
+	JL	EL0
+IF0	LDA	avg
+	CHAR
+	STX	BUFO
+	OUT	BUFO(IO)
+	JBUS	*(IO)
+	JMP	EF0
+EL0	LDA	V2
+	CON	10
+V2	EQU	*-1
+	SUB	avg
+	CHAR
+	STX	BUFO
+	OUT	BUFO(IO)
+	JBUS	*(IO)
+	JMP	EF0
+EF0	END	avg

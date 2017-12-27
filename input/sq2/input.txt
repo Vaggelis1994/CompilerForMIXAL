@@ -1,0 +1,11 @@
+PROGRAM sqn;
+	VAR number	:INTEGER;
+	VAR squared	:INTEGER;
+BEGIN
+	READ number;
+	WHILE (number > 0) DO 
+		squared := number * number; 		
+		WRITE squared;
+		READ number;		
+	ENDDO;
+END.

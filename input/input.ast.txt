@@ -1,0 +1,20 @@
+<program> [PROGRAM: abs]
+|---------- <decl_list>
+            |---------- <declaration> [number:INTEGER]
+|---------- <block> [BLOCK]
+            |---------- <stat_seq>
+                        |---------- <statement> [READ number]
+                        |---------- <statement> [WHILE]
+                                    |---------- <expression> [number!=0]
+                                    [DO]
+                                    |---------- <statement> 
+                                    [IF]
+                                    |---------- [number<0]
+                                    [THEN]
+                                    |---------- <statement> [WRITE -number]
+                                    [ELSE]
+                                    |---------- <statement> [WRITE number]
+                                    [ENDIF]
+                                    |---------- <statement> [READ number]
+                                    [ENDDO]
+[END: abs]

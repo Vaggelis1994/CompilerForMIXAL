@@ -1,0 +1,21 @@
+<program> [PROGRAM: avg]
+|---------- <decl_list>
+            |---------- <declaration> [grade1:INTEGER]
+            |---------- <declaration> [grade2:INTEGER]
+            |---------- <declaration> [grade3:INTEGER]
+            |---------- <declaration> [avg:INTEGER]
+|---------- <block> [BLOCK]
+            |---------- <stat_seq>
+                        |---------- <statement> [READ grade1]
+                        |---------- <statement> [READ grade2]
+                        |---------- <statement> [READ grade3]
+                        |---------- <statement> [avg := [[[grade1+grade2]+grade3]/3]]
+                        |---------- <statement> 
+                        [IF]
+                        |---------- [avg>=5]
+                        [THEN]
+                        |---------- <statement> [WRITE avg]
+                        [ELSE]
+                        |---------- <statement> [WRITE [10-avg]]
+                        [ENDIF]
+[END: avg]

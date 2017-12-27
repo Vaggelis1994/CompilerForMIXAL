@@ -1,0 +1,15 @@
+<program> [PROGRAM: sqn]
+|---------- <decl_list>
+            |---------- <declaration> [number:INTEGER]
+            |---------- <declaration> [squared:INTEGER]
+|---------- <block> [BLOCK]
+            |---------- <stat_seq>
+                        |---------- <statement> [READ number]
+                        |---------- <statement> [WHILE]
+                                    |---------- <expression> [number>0]
+                                    [DO]
+                                    |---------- <statement> [squared := [number*number]]
+                                    |---------- <statement> [WRITE squared]
+                                    |---------- <statement> [READ number]
+                                    [ENDDO]
+[END: sqn]

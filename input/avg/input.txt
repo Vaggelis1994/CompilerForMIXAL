@@ -1,0 +1,16 @@
+PROGRAM avg;
+	VAR grade1	:INTEGER;
+	VAR grade2	:INTEGER;
+	VAR grade3	:INTEGER;
+	VAR avg		:INTEGER;
+BEGIN
+	READ grade1;
+	READ grade2;
+	READ grade3;
+	avg := (grade1 + grade2 + grade3) / 3;
+	IF (avg >= 5) THEN
+		WRITE avg;
+ 	ELSE
+		WRITE 10 - avg;				
+	ENDIF;
+END.
